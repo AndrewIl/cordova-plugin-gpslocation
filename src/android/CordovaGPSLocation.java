@@ -179,7 +179,7 @@ public class CordovaGPSLocation extends CordovaPlugin {
 		boolean gps_enabled = false;
 		try {
 			if(hasPermission()){
-				gps_enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+				gps_enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 			}else{
 				PermissionHelper.requestPermissions(this, 0, permissions);
 			}
@@ -235,13 +235,16 @@ public class CordovaGPSLocation extends CordovaPlugin {
 
 	private void getLastLocation(JSONArray args, CallbackContext callbackContext) {
 		int maximumAge;
+		string provider = args.optString(1, LocationManager.GPS_PROVIDER);
+
 		try {
 			maximumAge = args.getInt(0);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			maximumAge = 0;
 		}
-		Location last = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+		Location last = mLocationManager.getLastKnownLocation(provider);
 		// Check if we can use lastKnownLocation to get a quick reading and use
 		// less battery
 		if (last != null && (System.currentTimeMillis() - last.getTime()) <= maximumAge) {
