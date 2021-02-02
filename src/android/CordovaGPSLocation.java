@@ -31,6 +31,8 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.Manifest;
+import android.content.pm.PackageManager;
 
 /*
  * This class is the interface to the Geolocation.  It's bound to the geo object.
@@ -191,18 +193,18 @@ public class CordovaGPSLocation extends CordovaPlugin {
 	{
 		PluginResult result;
 		//This is important if we're using Cordova without using Cordova, but we have the geolocation plugin installed
-		if(context != null) {
+		if(callbackContext != null) {
 			for (int r : grantResults) {
 				if (r == PackageManager.PERMISSION_DENIED) {
 					LOG.d(TAG, "Permission Denied!");
 					result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION);
-					context.sendPluginResult(result);
+					callbackContext.sendPluginResult(result);
 					return;
 				}
 
 			}
 			result = new PluginResult(PluginResult.Status.OK);
-			context.sendPluginResult(result);
+			callbackContext.sendPluginResult(result);
 		}
 	}
 
