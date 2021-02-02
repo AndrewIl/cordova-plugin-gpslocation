@@ -235,7 +235,7 @@ public class CordovaGPSLocation extends CordovaPlugin {
 
 	private void getLastLocation(JSONArray args, CallbackContext callbackContext) {
 		int maximumAge;
-		string provider = args.optString(1, LocationManager.GPS_PROVIDER);
+		String provider = args.optString(1, LocationManager.GPS_PROVIDER);
 
 		try {
 			maximumAge = args.getInt(0);
