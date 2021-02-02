@@ -134,7 +134,7 @@ var GPSLocation = {
 				// always truthy before we call into native
 				timeoutTimer.timer = true;
 			}
-			exec(win, fail, "GPSLocation", "getLocation", [options.maximumAge]);
+			exec(win, fail, "GPSLocation", "getLocation", [options.maximumAge, options.provider]);
 		}
 		return timeoutTimer;
 	},
