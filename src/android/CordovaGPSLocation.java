@@ -200,7 +200,6 @@ public class CordovaGPSLocation extends CordovaPlugin {
 		if(context != null) {
 			for (int r : grantResults) {
 				if (r == PackageManager.PERMISSION_DENIED) {
-					LOG.d(TAG, "Permission Denied!");
 					result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION);
 					context.sendPluginResult(result);
 					return;
