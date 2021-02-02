@@ -86,14 +86,14 @@ public class CordovaGPSLocation extends CordovaPlugin {
 		}
 
 		if (isGPSdisabled()) {
-			fail(CordovaLocationListener.POSITION_UNAVAILABLE, "GPS is disabled on this device.", callbackContext, false);
+			fail(CordovaLocationListener.POSITION_UNAVAILABLE, "GPS is disabled on this device.", context, false);
 			return true;
 		}
 
 		if (action.equals("getLocation")) {
-			getLastLocation(args, callbackContext);
+			getLastLocation(args, context);
 		} else if (action.equals("addWatch")) {
-			addWatch(id, callbackContext);
+			addWatch(id, context);
 		}
 
 		return true;
@@ -140,7 +140,7 @@ public class CordovaGPSLocation extends CordovaPlugin {
 		PluginResult result = new PluginResult(PluginResult.Status.OK,
 				this.returnLocationJSON(loc));
 		result.setKeepCallback(keepCallback);
-		callbackContext.sendPluginResult(result);
+		context.sendPluginResult(result);
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class CordovaGPSLocation extends CordovaPlugin {
 		}
 
 		result.setKeepCallback(keepCallback);
-		callbackContext.sendPluginResult(result);
+		context.sendPluginResult(result);
 	}
 
 	private boolean isGPSdisabled() {
@@ -246,9 +246,9 @@ public class CordovaGPSLocation extends CordovaPlugin {
 		// less battery
 		if (last != null && (System.currentTimeMillis() - last.getTime()) <= maximumAge) {
 			PluginResult result = new PluginResult(PluginResult.Status.OK, returnLocationJSON(last));
-			callbackContext.sendPluginResult(result);
+			context.sendPluginResult(result);
 		} else {
-			getCurrentLocation(callbackContext, Integer.MAX_VALUE);
+			getCurrentLocation(context, Integer.MAX_VALUE);
 		}
 	}
 
@@ -257,11 +257,11 @@ public class CordovaGPSLocation extends CordovaPlugin {
 	}
 
 	private void getCurrentLocation(CallbackContext callbackContext, int timeout) {
-		getListener().addCallback(callbackContext, timeout);
+		getListener().addCallback(context, timeout);
 	}
 
 	private void addWatch(String timerId, CallbackContext callbackContext) {
-		getListener().addWatch(timerId, callbackContext);
+		getListener().addWatch(timerId, context);
 	}
 
 	private CordovaLocationListener getListener() {
