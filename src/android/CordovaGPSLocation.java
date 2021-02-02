@@ -176,7 +176,7 @@ public class CordovaGPSLocation extends CordovaPlugin {
 	}
 
 	private boolean isGPSdisabled() {
-		boolean gps_enabled;
+		boolean gps_enabled = false;
 		try {
 			if(hasPermission()){
 				gps_enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
