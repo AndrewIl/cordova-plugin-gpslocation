@@ -56,7 +56,11 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />	
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />	
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />	
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
         </config-file>
 
         <source-file src="src/android/CordovaLocationListener.java" target-dir="src/fr/louisbl/cordova/gpslocation" />
