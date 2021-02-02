@@ -23,6 +23,7 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PluginResult;
+import org.apache.cordova.PermissionHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +44,8 @@ public class CordovaGPSLocation extends CordovaPlugin {
 	LocationManager getLocationManager() {
 		return mLocationManager;
 	}
+
+	String [] permissions = { Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION };
 
 	@Override
 	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -169,13 +172,59 @@ public class CordovaGPSLocation extends CordovaPlugin {
 	private boolean isGPSdisabled() {
 		boolean gps_enabled;
 		try {
-			gps_enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			if(hasPermission()){
+				gps_enabled = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+			}else{
+				PermissionHelper.requestPermissions(this, 0, permissions);
+			}
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			gps_enabled = false;
 		}
 
 		return !gps_enabled;
+	}
+
+	public void onRequestPermissionResult(int requestCode, String[] permissions,
+										  int[] grantResults) throws JSONException
+	{
+		PluginResult result;
+		//This is important if we're using Cordova without using Cordova, but we have the geolocation plugin installed
+		if(context != null) {
+			for (int r : grantResults) {
+				if (r == PackageManager.PERMISSION_DENIED) {
+					LOG.d(TAG, "Permission Denied!");
+					result = new PluginResult(PluginResult.Status.ILLEGAL_ACCESS_EXCEPTION);
+					context.sendPluginResult(result);
+					return;
+				}
+
+			}
+			result = new PluginResult(PluginResult.Status.OK);
+			context.sendPluginResult(result);
+		}
+	}
+
+	public boolean hasPermission() {
+		for(String p : permissions)
+		{
+			if(!PermissionHelper.hasPermission(this, p))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/*
+	 * We override this so that we can access the permissions variable, which no longer exists in
+	 * the parent class, since we can't initialize it reliably in the constructor!
+	 */
+
+	public void requestPermissions(int requestCode)
+	{
+		PermissionHelper.requestPermissions(this, requestCode, permissions);
 	}
 
 
